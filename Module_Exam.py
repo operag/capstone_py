@@ -115,7 +115,7 @@ def showSortMenu():
             names_list = list(map(lambda x:x.capitalize(), items[0].keys()))
             column = inputMustBeFilled("Choose properties to be sorted [{columns}]: ".format(columns = "|".join(names_list)), keys_list)
             sortItems(column=column.lower(), mode=menu)
-            print("Items has been sorted by {columns} {modes}".format(columns = column, modes = "Ascending" if mode == 1 else "Descending"))
+            print("Items has been sorted by {columns} {modes}".format(columns = column, modes = "Ascending" if menu == 1 else "Descending"))
             showInventory()
         elif menu == 3 :
             break
@@ -142,7 +142,6 @@ def showInventoryMenu():
                 input("")
             elif menu == 3 :
                 showSortMenu()
-                break
             elif menu == 4 :
                 break
     else:
@@ -338,7 +337,7 @@ def showInputForm(idx = -1):
                 print("Item code has been taken by other item, use another item code !")
         else:
             break
-    name = inputMustBeFilled(text="Item Name [max 35 chars]: ", maxchar=35)
+    name = inputMustBeFilled(text="Item Name [max 40 chars]: ", maxchar=40)
     price = inputInt(text="Price: ", min=0)
     qty = inputInt(text="Qty: ", min=0)
     return {"code": code,"name":name, "price": price, "qty": qty}
@@ -392,6 +391,8 @@ def removeInventory() :
         print("Data successfully deleted")
     else:
         print("The data you are looking for does not exists")
+    print("Press enter to continue..")
+    input("")
 
 
 def addTransRecap(cartList) :
