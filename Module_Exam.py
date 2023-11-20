@@ -1,9 +1,12 @@
 # Capsone Project Exam
+
+# Import Section
 from datetime import datetime
 import math
 # import os
 # import platform
 
+# Declare Variables
 items = [{"code": "BB-DRUM-C-D-C","name":"BB DYE INK FOR CANON C 20 LITRE", "price": 100000, "qty": 10},
          {"code": "BB-INK-R800-R-250","name":"BB INK FOR R800 R 250ML", "price": 40000, "qty": 100},
          ]
@@ -13,16 +16,20 @@ favorite = []
 numItems = 0
 totRev = 0
 
+# Function to draw limiter line
 def clear_screen():
     print(padStr("", 145, "_"))
 
+# Function for format currency
 def format_currency(amount):
     formatted_amount = "{:,.2f}".format(amount).replace(',', 'temp').replace('.', ',').replace('temp', '.')
     return "Rp " + formatted_amount
 
+# Function to pad string left or right
 def padStr(x, length, char = " ", pos = "left") :
     return str(x).ljust(length, char) if pos == "right" else str(x).rjust(length, char);
 
+# FUnction to get idx of list params based on code param
 def getIdx(code, exclude = "", list = items) :
     idx = 0
     for i in list :
@@ -32,27 +39,22 @@ def getIdx(code, exclude = "", list = items) :
             return idx
         idx += 1
     return -1
-    idx = 0
-    for i in carts :
-        if (i["code"].lower() == exclude.lower()) :
-            continue
-        if (i["code"].lower() == code.lower()) :
-            return idx
-        idx += 1
-    return -1
 
+# Function to calculate total carts items amount
 def getTotalCarts() :
     total = 0
     for i in carts:
         total += (i["price"] * i["qty"])
     return total
 
+# Function to calculate total qty of inventory
 def getTotalInventory() :
     qty = 0
     for i in items:
         qty += i["qty"]
     return qty 
 
+# Input int data but with validation min and max value
 def inputInt(text, max = 9999999999, min = 1):
     while(True):
         try:
@@ -68,6 +70,7 @@ def inputInt(text, max = 9999999999, min = 1):
             x = 0
     return x
 
+# Input string data but with validation must be filled and max char
 def inputMustBeFilled(text, lists = None, maxchar = 9999):
     while(True):
         x = input(text)
@@ -81,25 +84,28 @@ def inputMustBeFilled(text, lists = None, maxchar = 9999):
             break
     return x
 
+# Sort Method
 def sortItems(column, itemList = items, mode = 1):
+    global favorite
     for i in range(len(itemList)) :
         for j in range(i + 1, len(itemList)) :
             if mode == 1 :
-                if type(itemList[i][column]) == datetime and itemList[i][column] > itemList[j][column].lower() :
+                if type(itemList[i][column]) == datetime and itemList[i][column] > itemList[j][column] :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
                 elif type(itemList[i][column]) == str and itemList[i][column].lower() > itemList[j][column].lower() :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
-                elif type(itemList[i][column]) == int and itemList[i][column] > items[j][column] :
+                elif type(itemList[i][column]) == int and itemList[i][column] > itemList[j][column] :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
             elif mode == 2:
-                if type(itemList[i][column]) == datetime and itemList[i][column] < itemList[j][column].lower() :
+                if type(itemList[i][column]) == datetime and itemList[i][column] < itemList[j][column] :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
                 elif type(itemList[i][column]) == str and itemList[i][column].lower() < itemList[j][column].lower() :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
-                elif type(itemList[i][column]) == int and itemList[i][column] < items[j][column] :
+                elif type(itemList[i][column]) == int and itemList[i][column] < itemList[j][column] :
                     itemList[i], itemList[j] = itemList[j], itemList[i]
     
-
+    
+# Show Sort Menu Function
 def showSortMenu():
     while(True) :
         clear_screen()
@@ -120,6 +126,7 @@ def showSortMenu():
         elif menu == 3 :
             break
 
+# Show Inventory Menu Function
 def showInventoryMenu():
     if (len(items) > 0):
         while(True) :
@@ -149,7 +156,7 @@ def showInventoryMenu():
         print("Press Enter to continue...")
         input()
 
-
+# View Trans Report Data Function
 def viewTransReport(keyword = ""):
     global trans;
     global numItems;
@@ -170,7 +177,7 @@ def viewTransReport(keyword = ""):
     else:
         print("There is no transaction data found !")
 
-
+# Show Recaps Menu Function
 def showRecapsMenu():
     while(True) :
         clear_screen()
@@ -190,7 +197,7 @@ def showRecapsMenu():
         elif menu == 2 :
             break
 
-
+# Show Favorite Items Function
 def showFavoriteItems():
     global favorite
     if (len(trans) > 0) :
@@ -205,16 +212,17 @@ def showFavoriteItems():
             else:
                 favorite[idx]["qty"] += i["qty"]
 
+        sortItems(column="qty", itemList=favorite, mode=2)
         showColHeader("favorite items")
         no = 1
         for i in favorite:
-            print(padStr(no, 5), "|", padStr(i["code"], 20), "|", padStr(i["name"], 40), "|", padStr(i["price"], 20), "|", padStr(i["qty"], 10),"|")
+            print(padStr(no, 5), "|", padStr(i["code"], 20), "|", padStr(i["name"], 40), "|", padStr(format_currency(i["price"]), 20), "|", padStr(i["qty"], 10),"|")
             no += 1
         print(padStr("", 109, "="))
     else:
         print("There is no favorite items found !")
 
-
+# Show Report Menu Function
 def showReportMenu():
     global trans
     if (len(trans) > 0):
@@ -228,7 +236,7 @@ def showReportMenu():
             print("3. Back")
             menu = inputInt("Choose menu [1-3]: ", 3);
             if menu == 1 :
-                sortItems(column="date", itemList=trans, mode=2)
+                sortItems(column="date", itemList=trans, mode=1)
                 showRecapsMenu()
             elif menu == 2 :
                 showFavoriteItems()
@@ -240,6 +248,7 @@ def showReportMenu():
         input("")
 
 
+# Show Main Menu Function
 def showMenu() :
     while(True) :
         clear_screen()
@@ -271,6 +280,7 @@ def showMenu() :
         elif menu == 7:
             break
 
+# Show Column Header Function
 def showColHeader(cart = "inventory") :
     if (cart == "inventory" or cart == "favorite items") :
         print(padStr("", 109, "="))
@@ -291,7 +301,7 @@ def showColHeader(cart = "inventory") :
         print(padStr("No", 5), "|", padStr("Trans Code", 10), "|", padStr("Trans Date", 16), "|", padStr("Item Code", 20), "|", padStr("Item name", 40),"|", padStr("Qty", 10),"|", padStr("Subtotal", 21),"|")
         print(padStr("", 142, "="))
 
-
+# Show Inventory Function
 def showInventory(keyword = "", sort = False, sortby = "") :
     global items;
     if (len(items) > 0) :
@@ -305,7 +315,7 @@ def showInventory(keyword = "", sort = False, sortby = "") :
     else:
         print("There is no items found in inventory !")
 
-
+# Show Carts Data Function
 def showCarts() :
     global carts;
     if (len(carts) > 0) :
@@ -321,7 +331,7 @@ def showCarts() :
     else:
         print("There is no items found in cart !")
 
-
+# Input Inventory Form
 def showInputForm(idx = -1):
     while(True):
         code = inputMustBeFilled(text="Item Code [max 20 chars]: ", maxchar=20)
@@ -342,6 +352,8 @@ def showInputForm(idx = -1):
     qty = inputInt(text="Qty: ", min=0)
     return {"code": code,"name":name, "price": price, "qty": qty}
  
+
+# Input or Update Inventory Function
 def inputInventory(idx = -1) :
     global items
     while(True):
@@ -349,12 +361,17 @@ def inputInventory(idx = -1) :
         if idx < 0 :
             items.append(item)
             print("Data successfully saved")
+            print("Press enter to continue..")
+            input("")
             break
         else :
             items[idx] = item
-            print("Data successfully updated") 
+            print("Data successfully updated")
+            print("Press enter to continue..")
+            input("") 
             break
 
+# Input data and Return index of list data function
 def inputItemIdx(text, type = "inventory") :
     index = -1
     while (True) :
@@ -370,7 +387,7 @@ def inputItemIdx(text, type = "inventory") :
         break
     return index
     
-
+# Update Inventory Data Function
 def updateInventory():
     global items;
     showInventory()
@@ -382,6 +399,7 @@ def updateInventory():
         print("Press enter to continue..")
         input("")
 
+# Remove Inventory Data Function
 def removeInventory() :
     global items;
     showInventory()
@@ -394,7 +412,7 @@ def removeInventory() :
     print("Press enter to continue..")
     input("")
 
-
+# Add Trans Data Function when Checkout 
 def addTransRecap(cartList) :
     global trans;
     lastidx = len(trans) + 1
@@ -403,6 +421,7 @@ def addTransRecap(cartList) :
         trans.extend([{"transcode":transcode, "code": c["code"], "name": c["name"], "price": c["price"], "qty": c["qty"],"date":datetime.now()}])
     print(f"Transaction data ({len(carts)}) items saved successfully !")
 
+# Rollback Stock Function
 def rollbackStock(code, cartItem) :
     global items;
     idx  = getIdx(code)
@@ -415,6 +434,7 @@ def rollbackStock(code, cartItem) :
         return idx
 
 
+# Order Items Menu Function
 def orderItems() :
     global items
     global carts
@@ -457,7 +477,7 @@ def orderItems() :
                         carts[idx]["qty"] = qty
                         print("Item {name} in cart successfully removed".format(name=carts[idx]["name"]))
             elif menu == 3:
-                showInventory()
+                showCarts()
                 idx = inputItemIdx(text="Input item Code in cart to be removed: ", type="cart")
                 if idx > -1:
                     rollbackStock(carts[idx]["code"], carts[idx])
@@ -487,7 +507,7 @@ def orderItems() :
         input("")
 
 
-
+# Call Show Main Menu Function
 showMenu()
 
     
