@@ -55,16 +55,24 @@ def getTotalInventory() :
     return qty 
 
 # Input int data but with validation min and max value
-def inputInt(text, max = 9999999999, min = 1):
+def inputInt(text, max = 9999999999, min = 1, opt = False):
     while(True):
         try:
             x = int(input(text))
-            if (x < min) :
-                print(f"Input minimum is {min}")
-            elif (x > max) :
-                print(f"Input cannot exceed {max}")
+            if opt == True :
+                if (x < min) :
+                    print(f"The option you entered is not valid")
+                elif (x > max) :
+                    print(f"The option you entered is not valid")
+                else :
+                    break
             else :
-                break
+                if (x < min) :
+                    print(f"Input minimum is {min}")
+                elif (x > max) :
+                    print(f"Input cannot exceed {max}")
+                else :
+                    break
         except:
             print("Input must be filled and should be number !")
             x = 0
@@ -138,7 +146,7 @@ def showInventoryMenu():
             print("2. Search Inventory Data")
             print("3. Sort Inventory Data")
             print("4. Back")
-            menu = inputInt("Choose menu [1-4]: ", 4);
+            menu = inputInt("Choose menu [1-4]: ", 4, 1, True);
             clear_screen()
             if menu == 1 :
                 showInventory()
@@ -188,7 +196,7 @@ def showRecapsMenu():
         print("There are {rows} transaction data rows found with total of {nums} sold ! Revenue: {revenue}".format(rows=len(trans), nums=numItems, revenue=totRev))
         print("1. Search Recaps")
         print("2. Back")
-        menu = inputInt("Choose menu [1-2]: ", 2);
+        menu = inputInt("Choose menu [1-2]: ", 2, 1, True);
         if menu == 1 :
             keyword = inputMustBeFilled("Input transaction code or item name to be searched(contains): ")
             viewTransReport(keyword)
@@ -234,7 +242,7 @@ def showReportMenu():
             print("1. Show Transaction Recaps")
             print("2. Show Most to Least Favorite Items (Based on Qty sold)")
             print("3. Back")
-            menu = inputInt("Choose menu [1-3]: ", 3);
+            menu = inputInt("Choose menu [1-3]: ", 3, 1, True);
             if menu == 1 :
                 sortItems(column="date", itemList=trans, mode=1)
                 showRecapsMenu()
@@ -263,7 +271,7 @@ def showMenu() :
         print("5. Order Items")
         print("6. View Report")
         print("7. Exit")
-        menu = inputInt("Choose menu [1-7]: ", 7);
+        menu = inputInt("Choose menu [1-7]: ", 7, 1, True);
         
         if menu == 1:
             showInventoryMenu()
@@ -460,7 +468,7 @@ def orderItems() :
             print("3. Remove Cart Items")
             print("4. Checkout")
             print("5. Back")
-            menu = inputInt("Choose menu [1-5]: ", 5);
+            menu = inputInt("Choose menu [1-5]: ", 5, 1, True);
             if menu == 1:
                 showInventory()
                 idx = inputItemIdx("Input item Code to be ordered: ")
