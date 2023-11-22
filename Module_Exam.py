@@ -456,7 +456,7 @@ def rollbackStock(code, cartItem) :
 def orderItems() :
     global items
     global carts
-    if getTotalInventory() > 0:
+    if len(items) > 0:
         while(True) :
             clear_screen()
             print("===================================================")
@@ -470,20 +470,25 @@ def orderItems() :
             print("5. Back")
             menu = inputInt("Choose menu [1-5]: ", 5, 1, True);
             if menu == 1:
-                showInventory()
-                idx = inputItemIdx("Input item Code to be ordered: ")
-                if idx > -1 :
-                    qty = inputInt("Input qty of items: ", items[idx]["qty"])
-                    c = items[idx].copy()
-                    c["qty"] = qty
-                    if qty > 0:
-                        items[idx]["qty"] -= qty
-                        cidx = getIdx(code=c["code"], list=carts)
-                        if cidx == -1:
-                            carts.append(c)
-                        else:
-                            carts[cidx]["qty"] += qty
-                        print("Item {name} successfully added to cart".format(name=items[idx]["name"]))
+                if getTotalInventory() > 0 :
+                    showInventory()
+                    idx = inputItemIdx("Input item Code to be ordered: ")
+                    if idx > -1 :
+                        qty = inputInt("Input qty of items: ", items[idx]["qty"])
+                        c = items[idx].copy()
+                        c["qty"] = qty
+                        if qty > 0:
+                            items[idx]["qty"] -= qty
+                            cidx = getIdx(code=c["code"], list=carts)
+                            if cidx == -1:
+                                carts.append(c)
+                            else:
+                                carts[cidx]["qty"] += qty
+                            print("Item {name} successfully added to cart".format(name=items[idx]["name"]))
+                else :
+                    print("There is no stock with qty left in the inventory! Please refill items.")
+                    print("Press enter to continue..")
+                    input("")
             elif menu == 2:
                 showCarts()
                 idx = inputItemIdx(text="Input item Code in cart to be updated: ", type="cart")
