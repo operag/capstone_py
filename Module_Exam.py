@@ -390,11 +390,16 @@ def inputItemIdx(text, type = "inventory") :
 # Update Inventory Data Function
 def updateInventory():
     global items;
-    showInventory()
-    idx = inputItemIdx("Input item Code to be updated: ")
-    if (idx > -1):
-        inputInventory(idx)
-    else:
+    if len(items) > 0 :
+        showInventory()
+        idx = inputItemIdx("Input item Code to be updated: ")
+        if (idx > -1):
+            inputInventory(idx)
+        else:
+            print("The data you are looking for does not exists")
+            print("Press enter to continue..")
+            input("")
+    else :
         print("The data you are looking for does not exists")
         print("Press enter to continue..")
         input("")
@@ -402,15 +407,20 @@ def updateInventory():
 # Remove Inventory Data Function
 def removeInventory() :
     global items;
-    showInventory()
-    idx = inputItemIdx("Input item Code to be removed: ")
-    if (idx > -1):
-        items.pop(idx)
-        print("Data successfully deleted")
-    else:
+    if len(items) > 0 :
+        showInventory()
+        idx = inputItemIdx("Input item Code to be removed: ")
+        if (idx > -1):
+            items.pop(idx)
+            print("Data successfully deleted")
+        else:
+            print("The data you are looking for does not exists")
+        print("Press enter to continue..")
+        input("")
+    else :
         print("The data you are looking for does not exists")
-    print("Press enter to continue..")
-    input("")
+        print("Press enter to continue..")
+        input("")
 
 # Add Trans Data Function when Checkout 
 def addTransRecap(cartList) :
